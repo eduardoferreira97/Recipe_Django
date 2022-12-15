@@ -1,19 +1,113 @@
-{% extends 'global/base.html' %}
+{% extends 'cook/base.html' %}
 
-{% block title %}Home | {% endblock title %}
+{% block title %}Home |{% endblock title %}
 
 {% block content %}
-
-{% comment %} {% include 'global/partials/messages.html' %} {% endcomment %}
-
-<div class="main-content main-content-list container">
-{% comment %} {% for recipe in recipes %}
-    {% include 'recipes/partials/recipe.html' %}
-{% empty %}
-    <div class="center m-y">
-        <h1>No recipes found here 🥲</h1>
+{% for recipe in recipe %}
+<div class="recipe recipe-list-item">
+    {% if recipe.cover %}
+        <div class="recipe-cover">
+            
+                <img src="{{ recipe.cover.url }}" alt="Temporário">
+            
+        </div>
+    {% endif %}
+    <div class="recipe-title-container">
+        <h2 class="recipe-title">
+                {{ recipe.title }}
+            
+        </h2>
     </div>
-{% endfor %} {% endcomment %}
-Hello World
+
+    <div class="recipe-author">
+
+        {% if recipe.author is not None %}
+            <span class="recipe-author-item">
+                
+                {% if recipe.author.profile %}
+                    <a href="{% url 'cook:index' %}">
+                {% endif %}
+
+                <i class="fas fa-user"></i>
+                {% if recipe.author.first_name %}
+                    {{ recipe.author.first_name }} {{ recipe.author.last_name }}
+                {% else %}
+                    {{ recipe.author.username }}
+                {% endif %}
+
+                {% if recipe.author.profile %}
+                    </a>
+                {% endif %}
+
+            </span>
+        {% endif %}
+
+        <span class="recipe-author-item">
+            <i class="fas fa-calendar-alt"></i>
+            {{ recipe.created_at|date:"d/m/Y" }} às {{ recipe.created_at|date:"H:i" }}
+        </span>
+
+        {% comment %} {% if recipe.category is not None %} {% endcomment %}
+            <span class="recipe-author-item">
+                <a href="{% url 'cook:category' recipe.category.id %}">
+                    <i class="fas fa-layer-group"></i>
+                    <span>{{ recipe.category.name }}</span>
+                </a>
+            </span>
+        {% comment %} {% endif %} {% endcomment %}
+    </div>
+
+    <div class="recipe-content">
+        <p>{{ recipe.description }}</p>
+    </div>
+
+    <div class="recipe-meta-container">
+        <div class="recipe-meta recipe-preparation">
+            <h3 class="recipe-meta-title"><i class="fas fa-stopwatch"></i>Preparação</h3>
+            <div class="recipe-meta-text">
+                {{ recipe.preparation_time }} {{ recipe.preparation_time_unit }}
+            </div>
+        </div>
+        <div class="recipe-meta recipe-servings">
+            <h3 class="recipe-meta-title"><i class="fas fa-pizza-slice"></i> Serve</h3>
+            <div class="recipe-meta-text">
+                {{ recipe.servings }} {{ recipe.servings_unit }}
+            </div>
+        </div>
+    </div>
+
+    {% if is_detail_page is not True %}
+        <footer class="recipe-footer">
+            <a class="recipe-read-more button button-dark button-full-width" href="{% url 'cook:index' %}">
+                <i class="fas fa-eye"></i>
+                <span>Leia mais...</span>
+            </a>
+        </footer>
+    {% endif %}
+
+    {% if is_detail_page is True %}
+        <div class="preparation-steps">
+            {% if recipe.preparation_steps_is_html is True %}
+                {{ recipe.preparation_steps|safe }}
+            {% else %}
+                {{ recipe.preparation_steps|linebreaksbr }}
+            {% endif %}
+
+            {% if recipe.tags.all %}
+                <p>
+                    Tags:
+                    {% for tag in recipe.tags.all %}
+                        <a href="{% url 'cook:index' %}">
+                            {{ tag.name }}
+                        </a>, 
+                    {% endfor %}
+                </p>
+            {% endif %}
+        </div>
+    {% endif %}
+
 </div>
-{% endblock content %}
+
+{%endfor%}
+
+{% endblock%}

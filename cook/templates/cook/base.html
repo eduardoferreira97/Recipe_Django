@@ -10,9 +10,12 @@
     <title>{% block title %} Recipes {% endblock  %}</title>
 </head>
 <body>
+    {% include 'cook/menu.html' %}
+    {% include 'cook/header.html' %}
 
     <main class="main-content-container">
-        {% block content %} {% endblock content %}
+        {% block content %} 
+        {% endblock content %}
         {% comment %} {% include 'cook/pagination.html' %} {% endcomment %}
     </main>
     {% include 'cook/footer.html' %}
