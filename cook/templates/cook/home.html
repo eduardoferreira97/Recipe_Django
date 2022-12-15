@@ -1,0 +1,19 @@
+{% extends 'global/base.html' %}
+
+{% block title %}Home | {% endblock title %}
+
+{% block content %}
+
+{% comment %} {% include 'global/partials/messages.html' %} {% endcomment %}
+
+<div class="main-content main-content-list container">
+{% comment %} {% for recipe in recipes %}
+    {% include 'recipes/partials/recipe.html' %}
+{% empty %}
+    <div class="center m-y">
+        <h1>No recipes found here 🥲</h1>
+    </div>
+{% endfor %} {% endcomment %}
+Hello World
+</div>
+{% endblock content %}
