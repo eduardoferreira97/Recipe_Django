@@ -1,10 +1,8 @@
 {% extends 'cook/base.html' %}
 
-{% block title %}{{title}}{% endblock title %}
+{% block title %}{{title}} | Details{% endblock%}
 
 {% block content %}
-
-{% for recipe in recipes %}
 
 <div class="recipe recipe-list-item">
     {% if recipe.cover %}
@@ -109,7 +107,5 @@
     {% endif %}
 
 </div>
-
-{%endfor%}
 
 {% endblock%}
